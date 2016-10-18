@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :reservations, only: [:index, :new, :create]
+
   devise_for :users
 
   root to: 'application#index'

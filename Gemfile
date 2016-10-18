@@ -47,4 +47,5 @@ group :development do
 end
 
 gem 'haml'
+gem 'foundation-rails'
 gem 'devise'

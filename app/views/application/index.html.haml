@@ -1,4 +1,14 @@
-%h1
-  %center TU JUŻ NIEDŁUGO BĘDZIE MOŻNA REZERWOWAĆ STOLIKI
-%h6
-  %center ale na razie jest ściernisko
+#menu-container.row.panel
+  .columns.small-12.large-4.small-centered.large-centered
+    .row
+      .columns.small-12.large-12
+        %span= link_to 'Pokaż rezerwacje', reservations_path, class: 'button expand'
+    .row
+      .columns.small-12.large-12
+        %span= link_to 'Zarezerwuj stolik', new_reservation_path, class: 'button radius'
+
+
+/ %h1
+/ %center TU JUŻ NIEDŁUGO BĘDZIE MOŻNA REZERWOWAĆ STOLIKI
+/ %h6
+/ %center ale na razie jest ściernisko

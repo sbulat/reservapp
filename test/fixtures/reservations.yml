@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2016-10-18
+  hour: 2016-10-18 12:43:41
+  people: 
+  client_phone: MyString
+  client_name: MyString
+  table_id: 1
+
+two:
+  date: 2016-10-18
+  hour: 2016-10-18 12:43:41
+  people: 
+  client_phone: MyString
+  client_name: MyString
+  table_id: 1
