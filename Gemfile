@@ -46,5 +46,5 @@ group :development do
   gem 'spring'
 end
 
-
+gem 'haml'
 gem 'devise'
