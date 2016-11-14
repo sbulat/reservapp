@@ -2,11 +2,102 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#menu-container {
-  margin-top: 3em;
+// Devise
 
-  .large-centered {
-    padding: 1em;
-    border: solid #000 3px;
+h2 {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+// Reservations
+
+#container {
+  max-width: 640px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+  }
+
+  p {
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+.panel .table {
+  display: none;
+
+  .cancelled {
+    text-decoration: line-through;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  i {
+    margin-left: 4px;
+  }
+
+  .glyphicon-trash{
+    cursor: pointer;
+  }
+}
+
+div.header-current, div.header-old {
+  margin-bottom: 2em;
+}
+
+p.header-current, p.header-old {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #000000;
+  cursor: pointer;
+}
+
+#new-container {
+  max-width: 640px;
+  margin: 0 auto;
+
+  #tables-list {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+
+    div {
+      width: 40px;
+      height: 70px;
+      margin: 10px 30px;
+      min-margin-right: 10px;
+      text-align: center;
+      border: 1px solid #999;
+      font-size: 15px;
+      line-height: 70px;
+    }
+
+    .success {
+      border-color: green;
+    }
+
+    .error {
+      border-color: red;
+    }
+  }
+
+  .input-group-addon {
+    min-width: 150px;
+  }
+}
+
+#note-container {
+  max-width: 480px;
+  margin: 0 auto;
+
+  .form-group {
+    text-align: center;
   }
 }

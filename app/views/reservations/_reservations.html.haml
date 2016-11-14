@@ -1,0 +1,28 @@
+- all_reservations.each do |date, reservations|
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title= date
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Godzina
+          %th Nazwisko klienta
+          %th Telefon klienta
+          %th Numer stolika
+          %th Ilość osób
+          %th Zarządzaj
+      %tbody
+        - reservations.each do |reservation|
+          %tr{ class: "#{'cancelled' if reservation.deleted?}" }
+            %td= reservation.hour
+            %td= reservation.client_name
+            %td= reservation.client_phone
+            %td= reservation.table_id
+            %td= reservation.people
+            %td
+              - if can?(:manage, reservation) && reservation.deleted?
+                = link_to glyph('', 'list-alt'), '#', class: 'show-note', data: { toggle: 'tooltip' }, title: reservation.cancel_reason
+              - if can?(:edit, reservation) && !reservation.deleted? && current
+                = link_to glyph('', 'pencil'), edit_reservation_path(reservation.id)
+              - if can?(:destroy, reservation) && !reservation.deleted? && current
+                = link_to glyph('', 'trash'), note_reservation_path(reservation.id)

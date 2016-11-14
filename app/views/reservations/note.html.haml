@@ -1,0 +1,11 @@
+#note-container
+  = form_tag reservation_path(@reservation), method: :delete do
+    .row
+      .form-group.col-xs-12
+        = label_tag 'note', 'Podaj powód odwołania rezerwacji'
+        = text_area_tag 'note', '', class: 'form-control', rows: 5
+    .row
+      .form-group.col-xs-6
+        = button_tag glyph('SKASUJ', 'exclamation-sign'), class: 'btn btn-danger btn-block'
+      .form-group.col-xs-6
+        = link_to glyph('Wróć', 'circle-arrow-left'), reservations_path, class: 'btn btn-primary btn-block'

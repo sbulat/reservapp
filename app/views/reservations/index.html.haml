@@ -1,0 +1,21 @@
+.row.header-current
+  .col-xs-12
+    %p.header-current= (params[:old] ? 'Stare rezerwacje' : 'Aktualne rezerwacje')
+    .row
+      .col-xs-12
+        - if @reservations.any?
+          = render partial: 'reservations', locals: { all_reservations: @reservations, current: !params[:old] }
+        - else
+          .alert.alert-warning Brak rezerwacji
+
+/ %button{ type: 'button', class: 'btn btn-primary btn-lg', data: { toggle: 'modal', target: '#basic' } } Launch demo modal
+
+/ %div{ id: 'basic', class: 'modal fade', role: 'dialog' }
+/   .modal-dialog
+/     .modal-content
+/       .modal-header
+/         %button{ type: 'button', class: 'close', data: { dismiss: 'modal' } } &times;
+/       .modal-body
+/         TUTAJ BEDZIE MOZNA DODAC NOTATKE
+/       .modal-footer
+/         TUTAJ SKASUJ I ANULUJ

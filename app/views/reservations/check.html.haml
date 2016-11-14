@@ -1,0 +1,27 @@
+#container
+  - if request.get?
+    .row
+      .col-xs-12
+        %h1 Sprawdź swoją rezerwację
+    .row
+      .col-xs-12.form
+        = form_tag(reservations_check_path, method: :post) do
+          .form-group.col-xs-12
+            .input-group
+              .input-group-addon= label_tag 'client_name', 'Imię i nazwisko'
+              = text_field_tag 'client_name', '', autofocus: true, class: 'form-control'
+          .form-group.col-xs-12
+            .input-group
+              .input-group-addon= label_tag 'client_phone', 'Numer telefonu'
+              = text_field_tag 'client_phone', '', class: 'form-control'
+          .form-group.col-xs-12
+            = submit_tag 'Szukaj', class: 'btn btn-success btn-block'
+  - else
+    - if @r
+      %h1 Twoja rezerwacja
+      .row
+        .col-xs-12
+          %p= "Rezerwacja na nazwisko #{@r.client_name}."
+          %p= "Stolik nr #{@r.table_id}, data: #{@r.date}, godzina: #{@r.hour}"
+    - else
+      %h1= "Nie znaleziono rezerwacji na nazwisko #{params[:client_name]}"

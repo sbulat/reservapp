@@ -4,16 +4,55 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "RezerwApka" %></title>
 
     <%= stylesheet_link_tag    "application" %>
-    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
 
   <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <% if user_signed_in? %>
+            <%= link_to 'RezerwApka', user_root_path, class: 'navbar-brand' %>
+          <% else %>
+            <%= link_to 'RezerwApka', root_path, class: 'navbar-brand' %>
+          <% end %>
+        </div>
+        <ul class="nav navbar-nav">
+          <% if user_signed_in? %>
+            <li><%= link_to 'Aktualne rezerwacje', reservations_path, class: 'active' if can? :read, Reservation %></li>
+            <li><%= link_to 'Stare rezerwacje', reservations_path(old: true) if can? :manage, Reservation %></li>
+            <li><%= link_to 'Rezerwowanie stolika', new_reservation_path if can? :create, Reservation %></li>
+          <% else %>
+            <li><%= link_to 'Sprawdź rezerwację', reservations_check_path %></li>
+          <% end %>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+          <li><%= link_to 'Wyloguj', destroy_user_session_path, method: :delete %></li>
+        <% else %>
+          <li><%= link_to 'Zaloguj się', new_user_session_path %></li>
+        <% end %>
+        </ul>
+      </div>
+    </nav>
 
-    <%= yield %>
+    <div class="container">
+      <% if flash.key? :notice %>
+        <div class="alert alert-success">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+      <% if flash.key? :error %>
+        <div class="alert alert-danger">
+          <%= flash[:error] %>
+        </div>
+      <% end %>
 
+      <%= yield %>
+    </div>
   </body>
 </html>

@@ -1,11 +1,11 @@
-#menu-container.row.panel
-  .columns.small-12.large-4.small-centered.large-centered
+#menu-container.row
+  .span12
     .row
-      .columns.small-12.large-12
-        %span= link_to 'Pokaż rezerwacje', reservations_path, class: 'button expand'
+      .columns.span12.text-center
+        = link_to 'Pokaż rezerwacje', reservations_path, class: 'button primary expand'
     .row
-      .columns.small-12.large-12
-        %span= link_to 'Zarezerwuj stolik', new_reservation_path, class: 'button radius'
+      .columns.span12.text-center
+        = link_to 'Zarezerwuj stolik', new_reservation_path, class: 'button primary expand'
 
 
 / %h1

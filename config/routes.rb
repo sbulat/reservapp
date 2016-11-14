@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
-  resources :reservations, only: [:index, :new, :create]
+  resources :reservations, except: [:show]
+  get 'reservations/:id/note', to: 'reservations#note', as: 'note_reservation'
+  match 'reservations/check' => 'reservations#check', via: [:get, :post]
+  get 'reservations/restrict_tables' => 'reservations#restrict_tables'
 
   devise_for :users
 
-  root to: 'application#index'
+  get 'reservations', to: 'reservations#index', as: 'user_root'
+  devise_scope :user do
+    root to: 'devise/sessions#new'
+  end
+  get '*path' => redirect('/')
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

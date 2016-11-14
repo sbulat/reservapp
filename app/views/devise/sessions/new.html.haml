@@ -1,0 +1,17 @@
+#new-container
+  .row
+    .col-xs-12
+      %h2 Zaloguj się
+  .row
+    .col-xs-12.form
+      = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        .form-group.col-xs-12
+          .input-group
+            .input-group-addon= f.label :email, 'Email'
+            = f.email_field :email, autofocus: true, class: 'form-control'
+        .form-group.col-xs-12
+          .input-group
+            .input-group-addon= f.label :password, 'Hasło'
+            = f.password_field :password, autocomplete: 'off', class: 'form-control'
+        .form-group.col-xs-12
+          = f.submit 'Zaloguj', class: 'btn btn-success btn-block'
