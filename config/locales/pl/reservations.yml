@@ -1,0 +1,30 @@
+pl:
+  reservations:
+    approved: "Twoja rezerwacja została potwierdzona. Zapraszamy dnia %{day} na godzinę %{hour}"
+    index:
+      current: Akutalne rezerwacje
+      old: Stare rezerwacje
+    new:
+    create:
+      reserved: "Zarezerwowano stolik nr %{nr} dnia %{day} na godzinę %{hour}"
+    form:
+      date: Data
+      hour: Godzina
+      client_phone: Telefon klienta
+      client_name: Naziwsko klienta
+      client_phone2: Numer telefonu
+      client_name2: Imię i naziwsko
+      people: Ilość osób
+      table_id: Stolik
+      approved: Zatwierdzona
+      submit: Zarezerwuj stolik
+    reservations:
+      hour: Godzina
+      name: Naziwsko klienta
+      phone: Telefon klienta
+      table: Numer stolika
+      people: Ilość osób
+      manage: Zarządzaj
+      approve: Zatwierdź
+      edit: Edytuj
+      cancel: Odwołaj

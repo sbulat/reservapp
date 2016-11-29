@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :reservations, except: [:show]
   get 'reservations/:id/note', to: 'reservations#note', as: 'note_reservation'
+  post 'reservations/:id/approve', to: 'reservations#approve', as: 'approve_reservation'
   match 'reservations/check' => 'reservations#check', via: [:get, :post]
   get 'reservations/restrict_tables' => 'reservations#restrict_tables'
 

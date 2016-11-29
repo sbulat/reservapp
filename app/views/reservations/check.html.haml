@@ -23,5 +23,9 @@
         .col-xs-12
           %p= "Rezerwacja na nazwisko #{@r.client_name}."
           %p= "Stolik nr #{@r.table_id}, data: #{@r.date}, godzina: #{@r.hour}"
+          - if @r.approved?
+            %p{ style: 'color: green; font-weight: bold'} POTWIERDZONA
+          - else
+            %p{ style: 'color: red; font-weight: bold'} NIEPOTWIERDZONA
     - else
       %h1= "Nie znaleziono rezerwacji na nazwisko #{params[:client_name]}"

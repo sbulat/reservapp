@@ -1,20 +1,22 @@
 - all_reservations.each do |date, reservations|
   .panel.panel-primary
     .panel-heading
-      %h3.panel-title= date
+      %h3.panel-title= display_date(date, reservations)
     %table.table.table-striped
       %thead
         %tr
-          %th Godzina
-          %th Nazwisko klienta
-          %th Telefon klienta
-          %th Numer stolika
-          %th Ilość osób
-          %th Zarządzaj
+          %th= t('.hour')
+          %th= t('.name')
+          %th= t('.phone')
+          %th= t('.table')
+          %th= t('.people')
+          %th= t('.manage')
       %tbody
         - reservations.each do |reservation|
           %tr{ class: "#{'cancelled' if reservation.deleted?}" }
-            %td= reservation.hour
+            %td
+              = reservation.hour
+              %span{ style: 'font-style: italic; color: red'}= '!' unless reservation.approved?
             %td= reservation.client_name
             %td= reservation.client_phone
             %td= reservation.table_id
@@ -22,7 +24,9 @@
             %td
               - if can?(:manage, reservation) && reservation.deleted?
                 = link_to glyph('', 'list-alt'), '#', class: 'show-note', data: { toggle: 'tooltip' }, title: reservation.cancel_reason
+              - if can?(:update, reservation) && !reservation.approved? && !reservation.deleted? && current
+                = link_to glyph('', 'ok'), approve_reservation_path(reservation.id), data: { no_turbolink: true }, method: :post, title: t('.approve')
               - if can?(:edit, reservation) && !reservation.deleted? && current
-                = link_to glyph('', 'pencil'), edit_reservation_path(reservation.id)
+                = link_to glyph('', 'pencil'), edit_reservation_path(reservation.id), title: t('.edit')
               - if can?(:destroy, reservation) && !reservation.deleted? && current
-                = link_to glyph('', 'trash'), note_reservation_path(reservation.id)
+                = link_to glyph('', 'remove'), note_reservation_path(reservation.id), title: t('.cancel')

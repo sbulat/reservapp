@@ -8,6 +8,8 @@ class Ability
       can :manage, Reservation
     elsif user.employee?
       can [:read, :create, :update, :destroy], Reservation
+    else
+      can [:create, :check], Reservation
     end
     # Define abilities for the passed in user here. For example:
     #
@@ -17,6 +19,7 @@ class Ability
     #   else
     #     can :read, :all
     #   end
+    #
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.

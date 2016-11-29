@@ -1,6 +1,7 @@
 class ReservationsController < ApplicationController
-  before_action :authenticate_user!, except: [:check]
-  before_action :set_reservation, only: [:edit, :update, :destroy, :note]
+  before_action :authenticate_user!, except: [:new, :create, :check, :restrict_tables]
+  before_action :set_reservation,
+                only: [:edit, :update, :destroy, :note, :approve]
 
   def index
     @reservations = params[:old] ? Reservation.old : Reservation.current
@@ -11,19 +12,22 @@ class ReservationsController < ApplicationController
   end
 
   def new
-    @reservation = Reservation.new
+    @r = Reservation.new
 
     respond_to { |format| format.html }
   end
 
   def create
-    @reservation = Reservation.new(reservation_params)
+    @r = Reservation.new(reservation_params)
 
     respond_to do |format|
-      if @reservation.save
-        flash[:notice] = "Zarezerowano stolik nr #{@reservation.table.number}" \
-          " dnia #{@reservation.date} na godzinę #{@reservation.hour}"
-        format.html { redirect_to reservations_path }
+      if @r.save
+        flash[:notice] = t(
+          '.reserved', nr: @r.table.number, day: @r.date, hour: @r.hour
+        )
+        format.html do
+          redirect_to(user_signed_in? ? reservations_path : reservations_check_path)
+        end
       else
         format.html { render :new }
       end
@@ -35,10 +39,10 @@ class ReservationsController < ApplicationController
   end
 
   def update
-    @reservation.assign_attributes(reservation_params)
+    @r.assign_attributes(reservation_params)
 
     respond_to do |format|
-      if @reservation.save
+      if @r.save
         flash[:notice] = 'Zaaktualizowano rezerwację'
         format.html { redirect_to reservations_path }
       else
@@ -50,13 +54,13 @@ class ReservationsController < ApplicationController
   def destroy
     if params[:note].blank?
       flash[:error] = 'Nie podano powodu odwołania rezerwacji'
-      redirect_to :back and return
+      redirect_to(:back) && return
     end
 
-    @reservation.update_attributes(cancel_reason: params[:note])
+    @r.update_attributes(cancel_reason: params[:note])
 
     respond_to do |format|
-      if @reservation.destroy
+      if @r.destroy
         flash[:notice] = 'Pomyślnie anulowano rezerwację'
         format.html { redirect_to reservations_path }
       else
@@ -68,6 +72,17 @@ class ReservationsController < ApplicationController
 
   def note
     respond_to { |format| format.html }
+  end
+
+  def approve
+    @r.update_attributes(approved: true)
+
+    respond_to do |format|
+      format.html do
+        @r.sens_sms
+        redirect_to reservations_path, notice: 'Zatwierdzono rezerwację'
+      end
+    end
   end
 
   def check
@@ -93,12 +108,12 @@ class ReservationsController < ApplicationController
 
   def reservation_params
     params.require(:reservation).permit(
-      :date, :hour, :client_phone, :client_name, :people, :table_id
+      :date, :hour, :client_phone, :client_name, :people, :table_id, :approved
     )
   end
 
   def set_reservation
-    @reservation = Reservation.find(params[:id])
+    @r = Reservation.find(params[:id])
   end
 
   def order_clause

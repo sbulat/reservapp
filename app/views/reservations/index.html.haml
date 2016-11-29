@@ -1,6 +1,6 @@
 .row.header-current
   .col-xs-12
-    %p.header-current= (params[:old] ? 'Stare rezerwacje' : 'Aktualne rezerwacje')
+    %p.header-current= (params[:old] ? t('.old') : t('.current'))
     .row
       .col-xs-12
         - if @reservations.any?

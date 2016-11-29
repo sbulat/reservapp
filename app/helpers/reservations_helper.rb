@@ -1,5 +1,9 @@
 module ReservationsHelper
-  def tables_select(count)
-    (1..count).map { |i| [i, i - 1] }
+  def display_date(date, reservations)
+    if !reservations.all?(&:approved?)
+      "#{date} <span style='font-style: italic; color: red'>!</span>".html_safe
+    else
+      date
+    end
   end
 end

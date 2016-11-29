@@ -1,31 +1,32 @@
-= form_for @reservation, html: { class: '' } do |f|
+= form_for @r, html: { class: '' } do |f|
   - if f.object.errors.any?
     - f.object.errors.full_messages.each_with_index do |msg, i|
       .alert.alert-danger.col-xs-12= msg
   #wrong-table.alert.alert-danger.col-xs-12{ style: 'display: none;' } Stolik zarezerwowany lub ma za mało miejsc
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :table_id, 'Stolik'
-      = f.select :table_id, options_from_collection_for_select(Table.all, :id, :number, @reservation.table_id), {}, { class: 'selectpicker form-control' }
+      .input-group-addon= f.label :table_id, t('.table_id')
+      = f.select :table_id, options_from_collection_for_select(Table.all, :id, :number, @r.table_id), {}, { class: 'selectpicker form-control' }
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :date, 'Data'
+      .input-group-addon= f.label :date, t('.date')
       = f.date_field :date, class: 'form-control'
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :hour, 'Godzina'
+      .input-group-addon= f.label :hour, t('.hour')
       = f.text_field :hour, size: 5, class: 'form-control'
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :people, 'Osób'
+      .input-group-addon= f.label :people, t('.people')
       = f.number_field :people, min: 1, class: 'form-control'
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :client_name, 'Nazwisko klienta'
+      .input-group-addon= f.label :client_name, user_signed_in? ? t('.client_name') : t('.client_name2')
       = f.text_field :client_name, class: 'form-control'
   .form-group.col-xs-12
     .input-group
-      .input-group-addon= f.label :client_phone, 'Telefon klienta'
+      .input-group-addon= f.label :client_phone, user_signed_in? ? t('.client_phone') : t('.client_phone2')
       = f.text_field :client_phone, size: 10, class: 'form-control'
   .form-group.col-xs-12
-    = f.submit 'Zarezerwuj stolik', class: 'btn btn-success btn-block'
+    = f.hidden_field :approved, value: user_signed_in? ? true : false
+    = f.submit t('.submit'), class: 'btn btn-success btn-block'

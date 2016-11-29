@@ -7,7 +7,7 @@
     <title><%= content_for?(:title) ? yield(:title) : "RezerwApka" %></title>
 
     <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
 
@@ -23,18 +23,19 @@
         </div>
         <ul class="nav navbar-nav">
           <% if user_signed_in? %>
-            <li><%= link_to 'Aktualne rezerwacje', reservations_path, class: 'active' if can? :read, Reservation %></li>
-            <li><%= link_to 'Stare rezerwacje', reservations_path(old: true) if can? :manage, Reservation %></li>
-            <li><%= link_to 'Rezerwowanie stolika', new_reservation_path if can? :create, Reservation %></li>
+            <li><%= link_to t('.current'), reservations_path, class: 'active' if can? :read, Reservation %></li>
+            <li><%= link_to t('.old'), reservations_path(old: true) if can? :manage, Reservation %></li>
+            <li><%= link_to t('.new'), new_reservation_path if can? :create, Reservation %></li>
           <% else %>
-            <li><%= link_to 'Sprawdź rezerwację', reservations_check_path %></li>
+            <li><%= link_to t('.new2'), new_reservation_path if can? :create, Reservation %></li>
+            <li><%= link_to t('.check'), reservations_check_path if can? :check, Reservation %></li>
           <% end %>
         </ul>
         <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
-          <li><%= link_to 'Wyloguj', destroy_user_session_path, method: :delete %></li>
+          <li><%= link_to t('.logout'), destroy_user_session_path, method: :delete %></li>
         <% else %>
-          <li><%= link_to 'Zaloguj się', new_user_session_path %></li>
+          <li><%= link_to t('.login'), new_user_session_path %></li>
         <% end %>
         </ul>
       </div>

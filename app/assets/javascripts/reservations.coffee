@@ -62,7 +62,7 @@ class Reservations
 
   _fadeAwayAlerts: () ->
     setTimeout ->
-      $('.alert').fadeOut(1000)
+      $(".alert:not('.alert-warning')").fadeOut(1000)
     , 3000
 
   _initShowNote: () ->

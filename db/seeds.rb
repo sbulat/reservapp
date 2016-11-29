@@ -16,6 +16,8 @@ require 'faker'
     people: (2..table.last).to_a.sample,
     client_phone: Faker::Number.number(9),
     client_name: Faker::GameOfThrones.character,
+    client_email: Faker::Internet.email,
+    approved: true,
     table_id: table.first
   )
 end

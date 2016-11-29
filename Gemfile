@@ -46,9 +46,11 @@ group :development do
   gem 'spring'
 end
 
+gem 'mailcatcher', group: :development
 gem 'faker', group: :development, require: false
 gem 'haml'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'devise'
 gem 'cancancan', '~> 1.10'
 gem 'paranoia', '~> 2.2'
+gem 'rails-i18n'
