@@ -1,0 +1,44 @@
+#container
+  .panel.panel-primary
+    .panel-heading
+      .panel-title Zarządzaj stolikami
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Numer stolika
+          %th Ilość miejsc
+          %th Zarządzaj
+      %tbody
+        - @tables.each do |table|
+          %tr
+            %td= table.number
+            %td.hidden.input-seats= number_field_tag "seats_#{table.id}", table.seats
+            %td
+              = table.seats
+              %span.pull-right.msg
+            %td
+              = link_to glyph('', 'pencil'), '#', class: 'edit-table'
+              = link_to glyph('', 'ok'), '#', class: 'save-table hidden'
+              = link_to glyph('', 'remove'), table_path(table.id), method: :delete, confirm: 'Jesteś pewien?', class: 'remove-table'
+
+%h2 Dodaj nowy stolik
+
+= form_for @table do |f|
+  - if f.object.errors.any?
+    - f.object.errors.full_messages.each_with_index do |msg, i|
+      .alert.alert-danger.col-xs-12= msg
+  .form-group.col-xs-4
+    .input-group
+      .input-group-addon= f.label :number, 'Numer'#, t('.people')
+      = f.number_field :number, min: 1, class: 'form-control'
+  .form-group.col-xs-4
+    .input-group
+      .input-group-addon= f.label :seats, 'Miejsca'#, t('.people')
+      = f.number_field :seats, min: 1, class: 'form-control'
+  .form-group.col-xs-4
+    = f.submit 'Dodaj', class: 'btn btn-success btn-block'
+
+Zarządzaj -> edit, delete
+%br
+edit zmienia liczbę miejsc w input a przycisk zamieniami na zapisz
+delete to zwykłe usuń

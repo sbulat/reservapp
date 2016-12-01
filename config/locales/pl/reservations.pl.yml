@@ -7,6 +7,14 @@ pl:
     new:
     create:
       reserved: "Zarezerwowano stolik nr %{nr} dnia %{day} na godzinę %{hour}"
+    update:
+      updated: Zaaktualizowano rezerwację
+    destroy:
+      reason_empty: Nie podano powodu odwołania rezerwacji
+      success: Pomyślnie anulowano rezerwację
+      error: Nie udało się anulować rezerwacji
+    approve:
+      success: Zatwierdzono rezerwację
     form:
       date: Data
       hour: Godzina

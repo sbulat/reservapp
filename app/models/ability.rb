@@ -6,6 +6,7 @@ class Ability
 
     if user.manager?
       can :manage, Reservation
+      can :manage, Table
     elsif user.employee?
       can [:read, :create, :update, :destroy], Reservation
     else

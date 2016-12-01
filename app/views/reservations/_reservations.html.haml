@@ -1,8 +1,8 @@
 - all_reservations.each do |date, reservations|
   .panel.panel-primary
-    .panel-heading
+    .panel-heading.reservations
       %h3.panel-title= display_date(date, reservations)
-    %table.table.table-striped
+    %table.table.table-striped.reservations
       %thead
         %tr
           %th= t('.hour')
@@ -19,7 +19,7 @@
               %span{ style: 'font-style: italic; color: red'}= '!' unless reservation.approved?
             %td= reservation.client_name
             %td= reservation.client_phone
-            %td= reservation.table_id
+            %td= reservation.table ? reservation.table.number : Table.with_deleted.find(reservation.table_id).number
             %td= reservation.people
             %td
               - if can?(:manage, reservation) && reservation.deleted?

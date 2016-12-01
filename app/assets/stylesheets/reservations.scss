@@ -26,7 +26,9 @@ h2 {
 }
 
 .panel .table {
-  display: none;
+  &.reservations {
+    display: none;
+  }
 
   .cancelled {
     text-decoration: line-through;

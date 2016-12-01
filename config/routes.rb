@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   match 'reservations/check' => 'reservations#check', via: [:get, :post]
   get 'reservations/restrict_tables' => 'reservations#restrict_tables'
 
+  resources :tables, only: [:index, :create, :update, :destroy]
+
   devise_for :users
 
   get 'reservations', to: 'reservations#index', as: 'user_root'

@@ -1,8 +1,8 @@
 #new-container.row
   .col-xs-12
     #tables-list.well
-      - (1..Table.count).each do |i|
-        %div{class: "table table-#{i}"}= i
+      - @tables.each do |id, number|
+        %div{class: "table table-id-#{id}"}= number
 
   .row
     .col-xs-12.form

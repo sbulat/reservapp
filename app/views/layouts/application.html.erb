@@ -26,6 +26,7 @@
             <li><%= link_to t('.current'), reservations_path, class: 'active' if can? :read, Reservation %></li>
             <li><%= link_to t('.old'), reservations_path(old: true) if can? :manage, Reservation %></li>
             <li><%= link_to t('.new'), new_reservation_path if can? :create, Reservation %></li>
+            <li><%= link_to t('.tables'), tables_path if can? :manage, Table %></li>
           <% else %>
             <li><%= link_to t('.new2'), new_reservation_path if can? :create, Reservation %></li>
             <li><%= link_to t('.check'), reservations_check_path if can? :check, Reservation %></li>

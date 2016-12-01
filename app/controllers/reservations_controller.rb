@@ -1,7 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :check, :restrict_tables]
-  before_action :set_reservation,
-                only: [:edit, :update, :destroy, :note, :approve]
+  before_action :set_reservation, only: [:edit, :update, :destroy, :note, :approve]
 
   def index
     @reservations = params[:old] ? Reservation.old : Reservation.current
@@ -13,6 +12,7 @@ class ReservationsController < ApplicationController
 
   def new
     @r = Reservation.new
+    @tables = Table.all.pluck(:id, :number)
 
     respond_to { |format| format.html }
   end
@@ -22,12 +22,8 @@ class ReservationsController < ApplicationController
 
     respond_to do |format|
       if @r.save
-        flash[:notice] = t(
-          '.reserved', nr: @r.table.number, day: @r.date, hour: @r.hour
-        )
-        format.html do
-          redirect_to(user_signed_in? ? reservations_path : reservations_check_path)
-        end
+        flash[:notice] = t('.reserved', nr: @r.table.number, day: @r.date, hour: @r.hour)
+        format.html { redirect_to(user_signed_in? ? reservations_path : reservations_check_path) }
       else
         format.html { render :new }
       end
@@ -43,7 +39,7 @@ class ReservationsController < ApplicationController
 
     respond_to do |format|
       if @r.save
-        flash[:notice] = 'Zaaktualizowano rezerwację'
+        flash[:notice] = t('.updated')
         format.html { redirect_to reservations_path }
       else
         format.html { render :edit }
@@ -52,19 +48,16 @@ class ReservationsController < ApplicationController
   end
 
   def destroy
-    if params[:note].blank?
-      flash[:error] = 'Nie podano powodu odwołania rezerwacji'
-      redirect_to(:back) && return
-    end
+    redirect_to(:back, flash: { error: t('.reason_empty') }) && return if params[:note].blank?
 
     @r.update_attributes(cancel_reason: params[:note])
 
     respond_to do |format|
       if @r.destroy
-        flash[:notice] = 'Pomyślnie anulowano rezerwację'
+        flash[:notice] = t('.success')
         format.html { redirect_to reservations_path }
       else
-        flash[:notice] = 'Nie udało się anulować rezerwacji'
+        flash[:notice] = t('.error')
         format.html { redirect_to :back }
       end
     end
@@ -80,7 +73,7 @@ class ReservationsController < ApplicationController
     respond_to do |format|
       format.html do
         @r.sens_sms
-        redirect_to reservations_path, notice: 'Zatwierdzono rezerwację'
+        redirect_to reservations_path, notice: t('.success')
       end
     end
   end

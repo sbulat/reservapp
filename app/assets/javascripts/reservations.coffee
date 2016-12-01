@@ -1,29 +1,14 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
 class Reservations
   constructor: () ->
     @._toggleReservation()
-    @._toggleOldReservations()
     @._listenersOnInputs()
     @._fadeAwayAlerts()
-    @._initShowNote()
 
   # reservations#index
   _toggleReservation: () ->
-    $('.panel-heading').each (idx, el) ->
+    $('.panel-heading.reservations').each (idx, el) ->
       $(el).click ->
         $(el).next().toggle()
-
-  _toggleOldReservations: () ->
-    $('p.header-old').click ->
-      $(@).next().slideToggle()
-      $el = $('i', $(@))
-      if $el.hasClass('glyphicon-chevron-down')
-        $el.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
-      else
-        $el.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down')
 
   # reservations#new
   setAvailableTables: (date, people, id) ->
@@ -41,7 +26,8 @@ class Reservations
 
   restrictTables: (ids) ->
     $('#tables-list .table').each (idx, el) ->
-      if $.inArray(idx + 1, ids) != -1
+      id = parseInt($(el).attr('class').match(/table-id-\d{0,2}/)[0].split('-')[2])
+      if $.inArray(id, ids) != -1
         $(el).removeClass('error').addClass('success')
       else
         $(el).removeClass('success').addClass('error')
@@ -64,11 +50,6 @@ class Reservations
     setTimeout ->
       $(".alert:not('.alert-warning')").fadeOut(1000)
     , 3000
-
-  _initShowNote: () ->
-    $('.show-note').click (ev) ->
-      ev.preventDefault()
-
 
 $(document).on 'turbolinks:load', ->
   window.Reservations = new Reservations
