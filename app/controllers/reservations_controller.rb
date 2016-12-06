@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :check, :restrict_tables]
-  before_action :set_reservation, only: [:edit, :update, :destroy, :note, :approve]
+  before_action :authenticate_user!, except: [:new, :create, :check]
+  before_action :set_reservation, only: [:edit, :update, :destroy, :note]
 
   def index
     @reservations = params[:old] ? Reservation.old : Reservation.current
@@ -25,6 +25,7 @@ class ReservationsController < ApplicationController
         flash[:notice] = t('.reserved', nr: @r.table.number, day: @r.date, hour: @r.hour)
         format.html { redirect_to(user_signed_in? ? reservations_path : reservations_check_path) }
       else
+        @tables = Table.all.pluck(:id, :number)
         format.html { render :new }
       end
     end
@@ -35,11 +36,13 @@ class ReservationsController < ApplicationController
   end
 
   def update
+    approved_then = @r.approved
     @r.assign_attributes(reservation_params)
 
     respond_to do |format|
       if @r.save
         flash[:notice] = t('.updated')
+        @r.send_sms if !approved_then && @r.approved
         format.html { redirect_to reservations_path }
       else
         format.html { render :edit }
@@ -48,17 +51,15 @@ class ReservationsController < ApplicationController
   end
 
   def destroy
-    redirect_to(:back, flash: { error: t('.reason_empty') }) && return if params[:note].blank?
+    redirect_to(:back, alert: t('.reason_empty')) && return if params[:note].blank?
 
     @r.update_attributes(cancel_reason: params[:note])
 
     respond_to do |format|
       if @r.destroy
-        flash[:notice] = t('.success')
-        format.html { redirect_to reservations_path }
+        format.html { redirect_to reservations_path, notice: t('.success') }
       else
-        flash[:notice] = t('.error')
-        format.html { redirect_to :back }
+        format.html { redirect_to :back, alert: t('.error') }
       end
     end
   end
@@ -67,41 +68,22 @@ class ReservationsController < ApplicationController
     respond_to { |format| format.html }
   end
 
-  def approve
-    @r.update_attributes(approved: true)
-
-    respond_to do |format|
-      format.html do
-        @r.sens_sms
-        redirect_to reservations_path, notice: t('.success')
-      end
-    end
-  end
-
   def check
     if request.post?
       @r = Reservation.current.where(
         client_name: params[:client_name],
         client_phone: params[:client_phone]
-      ).first
+      )
     end
 
     respond_to { |format| format.html }
-  end
-
-  def restrict_tables
-    respond_to do |format|
-      date_ids = Table.ids_by_date(params[:date], params[:id])
-      people_ids = Table.ids_by_people(params[:people])
-      format.json { render json: date_ids & people_ids }
-    end
   end
 
   private
 
   def reservation_params
     params.require(:reservation).permit(
-      :date, :hour, :client_phone, :client_name, :people, :table_id, :approved
+      :date, :hour, :client_phone, :client_name, :people, :table_id, :approved, :picked_up
     )
   end
 

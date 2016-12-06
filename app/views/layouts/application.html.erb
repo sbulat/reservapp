@@ -27,6 +27,7 @@
             <li><%= link_to t('.old'), reservations_path(old: true) if can? :manage, Reservation %></li>
             <li><%= link_to t('.new'), new_reservation_path if can? :create, Reservation %></li>
             <li><%= link_to t('.tables'), tables_path if can? :manage, Table %></li>
+            <li><%= link_to t('.users'), users_path if can? :manage, User %></li>
           <% else %>
             <li><%= link_to t('.new2'), new_reservation_path if can? :create, Reservation %></li>
             <li><%= link_to t('.check'), reservations_check_path if can? :check, Reservation %></li>
@@ -34,6 +35,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
+          <li><%= link_to t('.change_password'), edit_user_registration_path %></li>
           <li><%= link_to t('.logout'), destroy_user_session_path, method: :delete %></li>
         <% else %>
           <li><%= link_to t('.login'), new_user_session_path %></li>
@@ -48,9 +50,9 @@
           <%= flash[:notice] %>
         </div>
       <% end %>
-      <% if flash.key? :error %>
+      <% if flash.key? :alert %>
         <div class="alert alert-danger">
-          <%= flash[:error] %>
+          <%= flash[:alert] %>
         </div>
       <% end %>
 

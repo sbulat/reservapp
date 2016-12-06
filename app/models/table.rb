@@ -2,6 +2,11 @@ class Table < ActiveRecord::Base
   acts_as_paranoid
   has_many :reservations
 
+  validates :number, :seats, presence: true
+  validates :number, numericality: { only_integer: true, greater_than: 0 }
+  validates :number, uniqueness: true
+  validates :seats, numericality: { only_integer: true, greater_than: 0 }
+
   class << self
     def ids_by_date(date, id)
       return Table.ids if date.nil?

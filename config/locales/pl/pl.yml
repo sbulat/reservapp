@@ -1,13 +1,22 @@
 pl:
+  all:
+    edit: 'Edytuj'
+    show: 'Pokaż'
+    save: 'Zapisz'
+    remove: 'Usuń'
+    sure: 'Jesteś pewien?'
+    manage: 'Zarządzaj'
   layouts:
     application:
       current: Aktualne rezerwacje
       old: Stare rezerwacje
       new: Rezerwowanie stolika
-      tables: Zarządzaj stolikami
+      tables: Zarządzanie stolikami
+      users: Zarządzanie użytkownikami
       new2: Zarezerwuj stolik
       check: Sprawdź rezerwację
       login: Zaloguj się
+      change_password: Zmiana hasła
       logout: Wyloguj
   activerecord:
     models:

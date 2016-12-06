@@ -8,3 +8,9 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+#edit-profile-container {
+  .input-group-addon {
+    min-width: 200px
+  }
+}

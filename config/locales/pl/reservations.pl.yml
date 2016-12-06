@@ -32,7 +32,9 @@ pl:
       phone: Telefon klienta
       table: Numer stolika
       people: Ilość osób
+      picked_up: Odebrana
       manage: Zarządzaj
       approve: Zatwierdź
+      marked_as_pick: Oznacz jako odebraną
       edit: Edytuj
       cancel: Odwołaj

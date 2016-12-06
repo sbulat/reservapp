@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161201230427) do
+ActiveRecord::Schema.define(version: 20161203183231) do
 
   create_table "reservations", force: :cascade do |t|
     t.date     "date"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20161201230427) do
     t.datetime "cancelled_at"
     t.text     "cancel_reason", limit: 65535
     t.boolean  "approved",                    default: false
+    t.boolean  "picked_up",                   default: false
   end
 
   create_table "tables", force: :cascade do |t|

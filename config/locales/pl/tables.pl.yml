@@ -1,0 +1,8 @@
+pl:
+  tables:
+    index:
+      manage: Zarządzaj stolikami
+      number: Numer stolika
+      seats: Ilość miejsc
+      add_new: Dodaj nowy stolik
+      submit: Dodaj

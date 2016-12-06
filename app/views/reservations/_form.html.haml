@@ -1,6 +1,6 @@
 = form_for @r, html: { class: '' } do |f|
   - if f.object.errors.any?
-    - f.object.errors.full_messages.each_with_index do |msg, i|
+    - f.object.errors.full_messages.each do |msg|
       .alert.alert-danger.col-xs-12= msg
   #wrong-table.alert.alert-danger.col-xs-12{ style: 'display: none;' } Stolik zarezerwowany lub ma za mało miejsc
   .form-group.col-xs-12

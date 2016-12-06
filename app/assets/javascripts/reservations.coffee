@@ -17,7 +17,7 @@ class Reservations
     params['people'] = people if people.length > 0
     params['id'] = id
     $.get(
-      '/reservations/restrict_tables',
+      '/tables/restrict',
       params,
       (data) ->
         window.Reservations.restrictTables(data)

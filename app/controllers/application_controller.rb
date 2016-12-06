@@ -12,4 +12,11 @@ class ApplicationController < ActionController::Base
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
+
+  def authenticate_manager!
+    unless current_user.try(:manager?)
+      redirect_to root_path, alert: 'Nie masz dostępu do tej stony!'
+      return
+    end
+  end
 end

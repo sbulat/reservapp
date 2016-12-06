@@ -5,9 +5,11 @@ class Ability
     user ||= User.new
 
     if user.manager?
+      can :manage, User
       can :manage, Reservation
       can :manage, Table
     elsif user.employee?
+      can [:update], User, id: user.id
       can [:read, :create, :update, :destroy], Reservation
     else
       can [:create, :check], Reservation

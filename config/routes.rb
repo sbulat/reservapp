@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
   resources :reservations, except: [:show]
   get 'reservations/:id/note', to: 'reservations#note', as: 'note_reservation'
-  post 'reservations/:id/approve', to: 'reservations#approve', as: 'approve_reservation'
   match 'reservations/check' => 'reservations#check', via: [:get, :post]
-  get 'reservations/restrict_tables' => 'reservations#restrict_tables'
 
   resources :tables, only: [:index, :create, :update, :destroy]
+  get 'tables/restrict' => 'tables#restrict'
 
   devise_for :users
+  get 'users', to: 'users#index', as: 'users'
+  post 'create_user', to: 'users#create', as: 'create_user'
+  delete 'destroy_user/:id', to: 'users#destroy', as: 'destroy_user'
+  post 'promote_user/:id', to: 'users#promote', as: 'promote_user'
 
   get 'reservations', to: 'reservations#index', as: 'user_root'
   devise_scope :user do

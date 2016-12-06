@@ -6,31 +6,23 @@ class Reservation < ActiveRecord::Base
             presence: true
   validates :table_id, numericality: true, inclusion: { in: Table.ids }
   validates :table_id, uniqueness: {
-    scope: :date#, message: 'already has been reserved on that date'
+    scope: :date
   }
   validate :table_have_enough_seats
   validate :date_cant_be_past
   validates :hour, format: {
-    with: /\A\d{1,2}.\d{2}\z/#, message: 'format should be HH:MM'
+    with: /\A\d{1,2}.\d{2}\z/
   }
   validates :people, numericality: { only_integer: true, greater_than: 0 }
   validates :client_phone, format: {
-    with: /\A\d{9}\z/#, message: 'must be 9 digits'
+    with: /\A\d{9}\z/
   }
 
   before_save :correct_hour
-  # after_create :send_sms
+  after_create :send_sms
 
   scope :current, -> { where('date >= ?', Time.current.beginning_of_day) }
   scope :old, -> { where('date < ?', Time.current.beginning_of_day) }
-
-  private
-
-  def correct_hour
-    h = hour.scan(/(\d+).(\d+)/).flatten
-    h[0] = "0#{h[0]}" if h[0].length == 1
-    self.hour = h.join(':')
-  end
 
   def send_sms
     return unless approved?
@@ -38,6 +30,14 @@ class Reservation < ActiveRecord::Base
     service = SmsAPI::Service.new(client_phone)
     service.message = I18n::t('.reservations.approved', day: date, hour: hour)
     service.send_sms
+  end
+
+  private
+
+  def correct_hour
+    h = hour.scan(/(\d+).(\d+)/).flatten
+    h[0] = "0#{h[0]}" if h[0].length == 1
+    self.hour = h.join(':')
   end
 
   def date_cant_be_past

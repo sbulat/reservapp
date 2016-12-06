@@ -1,0 +1,15 @@
+pl:
+  users:
+    index:
+      manage: Zarządzaj użytkownikami
+      email: Email
+      role: Rola
+      promote: Nadaj rolę managera
+      delete: Usuń użytkownika
+      add_new: Dodaj nowego użytkownika
+      password: Hasło
+      password_confirmation: Potwierdzenie hasła
+      submit: Dodaj
+    roles:
+      manager: Manager
+      employee: Pracownik

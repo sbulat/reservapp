@@ -17,15 +17,16 @@
           .form-group.col-xs-12
             = submit_tag 'Szukaj', class: 'btn btn-success btn-block'
   - else
-    - if @r
-      %h1 Twoja rezerwacja
-      .row
-        .col-xs-12
-          %p= "Rezerwacja na nazwisko #{@r.client_name}."
-          %p= "Stolik nr #{@r.table_id}, data: #{@r.date}, godzina: #{@r.hour}"
-          - if @r.approved?
-            %p{ style: 'color: green; font-weight: bold'} POTWIERDZONA
-          - else
-            %p{ style: 'color: red; font-weight: bold'} NIEPOTWIERDZONA
+    - if @r.any?
+      %h1= @r.many? ? 'Twoje rezerwacje' : 'Twoja rezerwacja'
+      - @r.each do |r|
+        .row
+          .col-xs-12
+            %p= "Rezerwacja na nazwisko #{r.client_name}."
+            %p= "Stolik nr #{r.table_id}, data: #{r.date}, godzina: #{r.hour}"
+            - if r.approved?
+              %p{ style: 'color: green; font-weight: bold'} POTWIERDZONA
+            - else
+              %p{ style: 'color: red; font-weight: bold'} NIEPOTWIERDZONA
     - else
       %h1= "Nie znaleziono rezerwacji na nazwisko #{params[:client_name]}"

@@ -2,6 +2,7 @@ class Tables
   constructor: () ->
     @._initEditTable()
     @._initSaveTable()
+    # @._initRemoveSpan()
 
   _initEditTable: () ->
     $('.edit-table').each (idx, el) ->
@@ -27,12 +28,14 @@ class Tables
         $seatsCol = $input.next()
         $seatsCol.show()
 
-        if window.Tables.updateTable(el)
-          $seatsCol.text("#{$input.find('input').val()}")
-          $seatsCol.find('span').addClass('success').removeClass('error').text('SUKCES')
-        else
-          $seatsCol.text("#{$input.find('input').val()}")
-          $seatsCol.find('span').addClass('error').removeClass('succes').text('BŁĄD')
+        $.when(window.Tables.updateTable(el)).done (res) ->
+          if res['message'] == 'success'
+            $seatsCol.text("#{$input.find('input').val()}")
+            $seatsCol.append(window.Tables.createSpan())
+          else
+            $seatsCol.append(window.Tables.createSpan('error'))
+
+          window.Tables.removeSpan()
 
   updateTable: (el) ->
     $input = $(el).closest('tr').find('input')
@@ -45,7 +48,20 @@ class Tables
       error: (jqXHR, textStatus, errorThrown) ->
         false
       success: (data, textStatus, jqXHR) ->
-        true
+        if data['message'] == 'success' then true else false
+
+  createSpan: (msg = 'success') ->
+    $span = $(document.createElement('span'))
+    $span.addClass('msg pull-right').addClass(msg)
+    $span.text(if msg == 'success' then 'SUKCES' else 'BŁĄD')
+    $span
+
+  removeSpan: () ->
+    $span = $('span.msg')
+    $span.fadeOut(2000)
+    setTimeout ->
+      $span.remove()
+    , 2000
 
 $(document).on 'turbolinks:load', ->
   window.Tables = new Tables

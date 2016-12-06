@@ -10,9 +10,11 @@
           %th= t('.phone')
           %th= t('.table')
           %th= t('.people')
+          %th= t('.picked_up')
           %th= t('.manage')
       %tbody
         - reservations.each do |reservation|
+          - next if reservation.table.nil? && current
           %tr{ class: "#{'cancelled' if reservation.deleted?}" }
             %td
               = reservation.hour
@@ -21,11 +23,14 @@
             %td= reservation.client_phone
             %td= reservation.table ? reservation.table.number : Table.with_deleted.find(reservation.table_id).number
             %td= reservation.people
+            %td= reservation.picked_up? ? glyph('', 'ok') : glyph('', 'remove')
             %td
               - if can?(:manage, reservation) && reservation.deleted?
-                = link_to glyph('', 'list-alt'), '#', class: 'show-note', data: { toggle: 'tooltip' }, title: reservation.cancel_reason
+                = link_to glyph('', 'list-alt'), '#', class: 'show-note', title: reservation.cancel_reason
               - if can?(:update, reservation) && !reservation.approved? && !reservation.deleted? && current
-                = link_to glyph('', 'ok'), approve_reservation_path(reservation.id), data: { no_turbolink: true }, method: :post, title: t('.approve')
+                = link_to glyph('', 'ok'), reservation_path(reservation.id, reservation: { approved: true }), method: :put, title: t('.approve'), data: { no_turbolink: true }
+              - if can?(:update, reservation) && !reservation.picked_up? && reservation.approved? && !reservation.deleted? && current
+                = link_to glyph('', 'thumbs-up'), reservation_path(reservation.id, reservation: { picked_up: true }), method: :put, title: t('.marked_as_pick'), data: { no_turbolink: true }
               - if can?(:edit, reservation) && !reservation.deleted? && current
                 = link_to glyph('', 'pencil'), edit_reservation_path(reservation.id), title: t('.edit')
               - if can?(:destroy, reservation) && !reservation.deleted? && current

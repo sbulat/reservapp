@@ -1,0 +1,42 @@
+#container
+  .panel.panel-primary
+    .panel-heading
+      .panel-title= t('.manage')
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= t('.email')
+          %th= t('.role')
+          %th= t('all.manage')
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td= user.email
+            %td= humanize_role(user.roles.first)
+            %td
+              - if can?(:update, user) && !user.manager?
+                = link_to glyph('', 'arrow-up'), promote_user_path(user.id), class: 'promote-user', method: :post, title: t('.promote')
+              - if can? :destroy, user
+                = link_to glyph('', 'remove'), destroy_user_path(user.id), class: 'remove-user', method: :delete, title: t('.delete'), data: { confirm: t('all.sure') }
+
+%h2= t('.add_new')
+
+= form_for @user, url: create_user_url do |f|
+  - if f.object.errors.any?
+    - f.object.errors.full_messages.each do |msg|
+      .alert.alert-danger.col-xs-12= msg
+  .form-group.col-xs-12
+  .col-md-3
+    .input-group
+      .input-group-addon= f.label :email, t('.email')
+      = f.text_field :email, class: 'form-control'
+  .form-group.col-xs-12.col-md-3
+    .input-group
+      .input-group-addon= f.label :password, t('.password')
+      = f.password_field :password, class: 'form-control'
+  .form-group.col-xs-12.col-md-4
+    .input-group
+      .input-group-addon= f.label :password_confirmation, t('.password_confirmation')
+      = f.password_field :password_confirmation, min: 1, class: 'form-control'
+  .form-group.col-xs-12.col-md-2
+    = f.submit t('.submit'), class: 'btn btn-success btn-block'

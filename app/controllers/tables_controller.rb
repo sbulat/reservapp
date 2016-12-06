@@ -1,5 +1,5 @@
 class TablesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:restrict]
 
   def index
     @tables = Table.order(:number)
@@ -9,12 +9,12 @@ class TablesController < ApplicationController
   def create
     @table = Table.new(table_parameters)
 
+    if @table.save
+      flash[:notice] = 'Utworzono stolik'
+    else
+      flash[:alert] = 'Wystąpił problem podczas tworzenia stolika'
+    end
     respond_to do |format|
-      if @table.save
-        flash[:notice] = 'Utworzono stolik'
-      else
-        flash[:error] = 'Wystąpił problem podczas tworzenia stolika'
-      end
       format.html { redirect_to tables_path }
     end
   end
@@ -38,10 +38,18 @@ class TablesController < ApplicationController
     if table.destroy
       flash[:notice] = 'Pomyślnie usunięto stolik'
     else
-      flash[:error] = 'Wystąpił błąd przy usuwaniu stolika'
+      flash[:alert] = 'Wystąpił błąd przy usuwaniu stolika'
     end
     respond_to do |format|
-      format.html { redirect_to table_path }
+      format.html { redirect_to tables_path }
+    end
+  end
+
+  def restrict
+    respond_to do |format|
+      date_ids = Table.ids_by_date(params[:date], params[:id])
+      people_ids = Table.ids_by_people(params[:people])
+      format.json { render json: date_ids & people_ids }
     end
   end
 
