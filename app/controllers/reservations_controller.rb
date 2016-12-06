@@ -19,7 +19,8 @@ class ReservationsController < ApplicationController
 
   def create
     @r = Reservation.new(reservation_params)
-
+    Rails.logger.error reservation_params.inspect
+    Rails.logger.error params.inspect
     respond_to do |format|
       if @r.save
         flash[:notice] = t('.reserved', nr: @r.table.number, day: @r.date, hour: @r.hour)
