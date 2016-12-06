@@ -3,10 +3,10 @@ require 'faker'
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
-# 8.times do |i|
-#   s = (2..7).to_a.sample
-#   Table.create(number: i + 1, seats: s)
-# end
+8.times do |i|
+  s = (2..7).to_a.sample
+  Table.create(number: i + 1, seats: s)
+end
 
 35.times do
   table = Table.pluck(:id, :seats).sample
